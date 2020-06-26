@@ -40,8 +40,20 @@ void Node::set_label(string new_label) {
 }
 
 bool Node::is_start_spot() {
-    // this function assumes the start spot is labeled with an "s"
-    return label == "s";
+    // the start spot is the spot in the lower left corner labeled with "s"
+    if (label == "s" && x_coord == wall_size - 1 && y_coord == 0) {
+        return true;
+    }
+    // if the Node is in the lower left corner (the starting spot) but not labeled "s", change the label
+    if (x_coord == wall_size - 1 && y_coord == 0) {
+        set_label("s");
+        return true;
+    }
+    // if the node fits neither of the above things then the node cannot be the starting spot
+    if (label == "s") { // if this spot is incorrectly labeled, fix the label
+        set_label("e");
+    }
+    return false;
 }
 
 bool Node::next_to_right_wall() {

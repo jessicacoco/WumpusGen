@@ -151,6 +151,40 @@ bool killw_test() {
     return true;
 }
 
+bool start_spot_test() {
+    // checks if the is_start_spot function correctly labels and identifies the starting position
+
+    // correctly labeled starting spot
+    Node labeledstart(3, 0, "s", 4); 
+    // middle spot that is incorrectly labeled as a starting spot
+    Node middlespot(2, 3, "s", 6);
+    // starting spot that is missing the correct label
+    Node unlabeledstart(4, 0, "e", 5);
+
+    if (!labeledstart.is_start_spot()) {
+        // if the correctly labeled starting spot returns false to being the start spot, test failed
+        return false;
+    }
+    if (middlespot.is_start_spot()) {
+        // if the incorrectly labeled middle spot returns true to being the start spot, then test failed
+        return false;
+    }
+    if (middlespot.get_label() != "e") {
+        // make sure the middle spot labeled as start spot gets its label changed
+        return false;
+    }
+    if (!unlabeledstart.is_start_spot()) {
+        // if the correct starting spot that does not have the right label returns false, test failed
+        return false;
+    }
+    if (unlabeledstart.get_label() != "s") {
+        // makes sure the starting spot gets labeled with correct label, "s"
+        return false;
+    }
+    // if this function made it to the end then everything worked, return true
+    return true;
+}
+
 int main() 
 {
 //variable to keep track of number of tests ran
@@ -195,6 +229,13 @@ if (killw_test()) {
     cout << "Kill wumpus test passed!" << endl;
 } else {
     cout << "Error, kill wumpus test failed!" << endl;
+}
+tests ++;
+if (start_spot_test()) {
+    successes ++;
+    cout << "Start spot test passed!" << endl;
+} else {
+    cout << "Error, start spot test failed!" << endl;
 }
 // if the number of successes matches the number of tests we ran, then we know everything passed
 if (successes == tests) {

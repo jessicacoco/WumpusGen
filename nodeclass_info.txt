@@ -28,3 +28,4 @@ bool change_label_test() tests the label setter and makes sure that all bools as
 bool wall_test() tests that all the bools that indicate a Node spot is next to a wall work, and that the wall bools are false for any Node that is in the middle of the game board.
 bool default_bool_test() tests that all of the bools that the node class defaults to false can be changed to true and will stay true if they are told to do so.
 bool killw_test() tests that the function for killing the wumpus only works on spots that are labeled "w" as having a wumpus on them, and that this function will make no changes if called on a spot that is not labeled as having a wumpus on it. 
+bool start_spot_test() tests that the starting node is correctly labeled, and if not, fixes the label. It also ensures that any node that is incorrectly labeled as being the starting spot will have its labeled be changed to a more appropriate description. 

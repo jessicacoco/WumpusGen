@@ -110,29 +110,65 @@ bool Node::is_gold() {
 
 bool Node::is_notpit_marked() {
     /* 
-    This function assumes that any spot that is marked as not having a pit is labeled "np". This
-    may need to be changed if the spot is labeled differently.
+    This function assumes that any spot that is marked as not having a pit is labeled "np" or
+    the np bool is set to true
     */
-
-    return label == "np";
+    if (this.np) {
+        return true;
+    }
+    if (label == "np") {
+        this.np = true;
+        return true;
+    }
+    // if not labeled as not having a pit and np bool is false, then return false
+    return false;
 }
 
 bool Node::is_notwumpus_marked() {
     /* 
-    This function assumes that any spot that is marked as not having a wumpus is labeled "nw". This
-    may need to be changed if the spot is labeled differently. 
+    This function assumes that any spot that is marked as not having a wumpus is labeled "nw" or the
+    nw bool is set to true 
     */
+    if (this.nw) {
+        return true;
+    }
+    if (label == "nw") {
+        this.nw = true;
+        return true;
+    }
+    // if not labeled as not having a wumpus and nw bool is false, then return false
+    return false;
+}
 
-    return label == "nw";
+bool Node::is_notgold_marked() {
+    /* This function assumes that any spot that is marked as not having gold is labeled "ng" or the
+    ng bool is set to true
+    */
+    if (this.ng) {
+        return true;
+    }
+    if (label == "ng") {
+        this.nw = true;
+        return true;
+    }
+    // if not labeled as not having gold and ng bool is false, then return false
+    return false;
 }
 
 bool Node::marked_as_visited() {
     /* 
-    This function assumes that any spot that is marked as visited is labeled with a "v". This
-    may need to be changed if the visited spots are labeled differently.
+    This function assumes that any spot that is marked as visited is labeled with a "v" or the
+    visited bool is set to true
     */
-    
-    return label == "v";
+    if (this.visited) {
+        return true;
+    }
+    if (label == "v") {
+        this.visited = true;
+        return true;
+    }
+    // if not labeled as visited and visited bool is false, then return false
+    return false;
 }
 
 

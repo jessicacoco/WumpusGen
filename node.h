@@ -42,6 +42,7 @@ class Node {
     bool is_gold(); // checks if the node is the gold
     bool is_notpit_marked(); // checks if the node is marked as not having a pit
     bool is_notwumpus_marked(); // checks if the node is marked as not having a wumpus
+    bool is_notgold_marked(); // checks if the node is marked as not having gold
     bool marked_as_visited(); // checks if the node was marked as having been visited
 	
     void killw(); // shoot at this node and removes the wumpus label, spot is now empty

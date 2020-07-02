@@ -129,6 +129,27 @@ bool default_bool_test() {
     if (!spot.glitter) {
         return false;
     }
+    // test that default bools match corresponding functions
+    Node node1(2, 2, "np", 5);
+    Node node2(2, 0 , "e", 4);
+    node2.np = true;
+    // node1 and node2 are both marked as not having a pit so make sure both of the following return true
+    if (!node1.is_notpit_marked() || !node2.is_notpit_marked()) {
+        return false;
+    }
+    if (!node1.np) {
+        return false;
+    }
+    Node node3(4, 0, "v", 5);
+    Node node4(1, 1, "e", 5);
+    node4.visited = true;
+    // node3 and node4 are both marked as visited so make sure both of the following return true
+    if (!node3.marked_as_visited() || !node4.visited) {
+        return false;
+    }
+    if (!node3.visited) {
+        return false;
+    }
     // everything passed to return true
     return true;
 }

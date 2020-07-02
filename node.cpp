@@ -113,11 +113,11 @@ bool Node::is_notpit_marked() {
     This function assumes that any spot that is marked as not having a pit is labeled "np" or
     the np bool is set to true
     */
-    if (this.np) {
+    if (this->np) {
         return true;
     }
     if (label == "np") {
-        this.np = true;
+        this->np = true;
         return true;
     }
     // if not labeled as not having a pit and np bool is false, then return false
@@ -129,11 +129,11 @@ bool Node::is_notwumpus_marked() {
     This function assumes that any spot that is marked as not having a wumpus is labeled "nw" or the
     nw bool is set to true 
     */
-    if (this.nw) {
+    if (this->nw) {
         return true;
     }
     if (label == "nw") {
-        this.nw = true;
+        this->nw = true;
         return true;
     }
     // if not labeled as not having a wumpus and nw bool is false, then return false
@@ -144,11 +144,11 @@ bool Node::is_notgold_marked() {
     /* This function assumes that any spot that is marked as not having gold is labeled "ng" or the
     ng bool is set to true
     */
-    if (this.ng) {
+    if (this->ng) {
         return true;
     }
     if (label == "ng") {
-        this.nw = true;
+        this->nw = true;
         return true;
     }
     // if not labeled as not having gold and ng bool is false, then return false
@@ -160,11 +160,11 @@ bool Node::marked_as_visited() {
     This function assumes that any spot that is marked as visited is labeled with a "v" or the
     visited bool is set to true
     */
-    if (this.visited) {
+    if (this->visited) {
         return true;
     }
     if (label == "v") {
-        this.visited = true;
+        this->visited = true;
         return true;
     }
     // if not labeled as visited and visited bool is false, then return false

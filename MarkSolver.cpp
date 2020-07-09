@@ -323,4 +323,178 @@ bool marksolver( game theboard, int mapsize ){
 	return false;
 }
 
+
+
+
+/* The assembled main function which takes in a board and return the difficulty
+	@param theboard  It is the game board the generator generated
+	@param mapsize  It is n for an n*n board, we assume that all the boards are in shape of n*n.
+	@return -1 cantsolve
+			0 easy, which doesnt involve glitter check and shoot wumpus
+			1 medium, which involve glitter check
+			2 hard which involve shooting down the wumpus
+			3 extreme, which involve both shooting down the wumpus and glitter check
+*/
+int eval( game theboard, int mapsize ){
+	// initialize the game
+	
+	game gamestate( theboard);
+	int i=0;
+	int j=0;
+	gamestate[i][j].visited=true;
+	
+	gamestate[i][j].nw=true;
+	gamestate[i][j].np=true;
+	
+	if (gamestate[i][j].breeze && gamestate[i][j].stench){
+		for(int x=0;x<mapsize;x++){
+			for(int y =0;y<mapsize;y++){
+				if(!((x==i+1&&y==j)||(x==i-1&&y==j)||(x==i&&y==j+1)||(x==i&&y==j-1)) ) {
+					gamestate[x][y].nw=true;
+				}
+			}
+		}
+	}
+	
+	else if(gamestate[i][j].stench){
+		for(int x=0;x<mapsize;x++){
+			for(int y =0;y<mapsize;y++){
+				if(!((x==i+1&&y==j)||(x==i-1&&y==j)||(x==i&&y==j+1)||(x==i&&y==j-1)) ) {
+					gamestate[x][y].nw=true;
+				}
+			}
+		}
+		if(i+1<mapsize) gamestate[i+1][j].np=true;
+		if(j+1<mapsize) gamestate[i][j+1].np=true;
+		if(i-1>=0) gamestate[i-1][j].np=true;
+		if(j-1>=0) gamestate[i][j-1].np=true;
+	}
+	
+	else if(gamestate[i][j].breeze){
+		if(i+1<mapsize) gamestate[i+1][j].nw=true;
+		if(j+1<mapsize) gamestate[i][j+1].nw=true;
+		if(i-1>=0) gamestate[i-1][j].nw=true;
+		if(j-1>=0) gamestate[i][j-1].nw=true;
+	}
+	else{
+		if(i+1<mapsize) gamestate[i+1][j].np=true;
+		if(j+1<mapsize) gamestate[i][j+1].np=true;
+		if(i-1>=0) gamestate[i-1][j].np=true;
+		if(j-1>=0) gamestate[i][j-1].np=true;
+		if(i+1<mapsize) gamestate[i+1][j].nw=true;
+		if(j+1<mapsize) gamestate[i][j+1].nw=true;
+		if(i-1>=0) gamestate[i-1][j].nw=true;
+		if(j-1>=0) gamestate[i][j-1].nw=true;
+	}
+	
+	// first round of expanding, before try to shoot the wumpus.
+	game beforeshooting=expandbyrule(gamestate,mapsize);
+	// if gold already reached, just return true
+	if(checkgold(beforeshooting,mapsize)) return 0;
+	if(checkglitter(beforeshooting,mapsize)) return 1;
+	//shoot the wumpus down if it is possible
+	int wnumber=countposwnum( beforeshooting, mapsize);
+		//only one possible place for wumpus
+	if(wnumber==1){
+		
+		int x=0;
+		int y=0;
+		
+		for(int i=0;i<mapsize;i++){
+			for(int j =0;j<mapsize;j++){
+				if (beforeshooting[i][j].nw==false){
+				x=i;
+				y=j;
+				
+				}
+				
+			}
+			
+		}
+		
+		
+		if(beforeshooting[x][y].is_wumpus()){
+			beforeshooting[x][y].nw=true;
+			beforeshooting[x][y].np=true;
+			for(int a=0;a<mapsize;a++){
+				for(int b=0;b<mapsize;b++){
+					beforeshooting[a][b].stench=false;
+				}
+			}
+		}
+		else{
+			beforeshooting[x][y].nw=true;
+		}
+		beforeshooting[x][y].killw();
+		
+		game aftershooting=expandbyrule(beforeshooting,mapsize);
+		
+		if(checkgold(aftershooting,mapsize)) return 2;
+		if(checkglitter(aftershooting,mapsize)) return 3;
+	}
+	
+		//if there are two possible places for wumpus
+	else if(wnumber==2){
+		int x=0;
+		int y=0;
+		int c,d=0;
+		for(int i=0;i<mapsize;i++){
+			for(int j =0;j<mapsize;j++){
+				if (beforeshooting[i][j].nw==false){
+				x=i;
+				y=j;
+				goto here;
+				}
+			}
+		}
+		here:
+		
+		
+		for(int i=0;i<mapsize;i++){
+			for(int j =0;j<mapsize;j++){
+				if (beforeshooting[i][j].nw==false){
+				c=i;
+				d=j;
+				
+				}
+			}
+		}
+		game beforeshooting1(beforeshooting);
+		if(beforeshooting1[x][y].is_wumpus()){
+			beforeshooting1[x][y].nw=true;
+			beforeshooting1[c][d].nw=true;
+			beforeshooting1[x][y].np=true;
+			for(int a=0;a<mapsize;a++){
+				for(int b=0;b<mapsize;b++){
+					beforeshooting1[a][b].stench=false;
+				}
+			}
+		}
+		else{
+			beforeshooting1[x][y].nw=true;
+		}
+		beforeshooting1[x][y].killw();
+		game aftershooting1=expandbyrule(beforeshooting1,mapsize);
+		game beforeshooting2(beforeshooting);
+		if(beforeshooting2[c][d].is_wumpus()){
+			beforeshooting2[x][y].nw=true;
+			beforeshooting2[c][d].nw=true;
+			beforeshooting2[c][d].np=true;
+			for(int a=0;a<mapsize;a++){
+				for(int b=0;b<mapsize;b++){
+					beforeshooting2[a][b].stench=false;
+				}
+			}
+		}
+		else{
+			beforeshooting2[c][d].nw=true;
+		}
+		beforeshooting2[c][d].killw();
+		game aftershooting2=expandbyrule(beforeshooting2,mapsize);
+		if((checkgold(aftershooting1,mapsize)||checkglitter(aftershooting1,mapsize))&&(checkgold(aftershooting2,mapsize)||checkglitter(aftershooting2,mapsize))) return 3;
+	}
+	
+	return -1;
+}
+
 #endif

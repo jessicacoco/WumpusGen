@@ -67,7 +67,7 @@ game maptrans(vector<vector<int> > numap){
 }
 
 vector<vector<int> > randgrid(int size,int pits,int tid){
-    srand((int(clock()*10000)+tid)*tid);
+    
     vector<vector<int> > grid;
     // create 1 board without any stuff in it
     for(int i=0;i<size;i++){
@@ -158,6 +158,7 @@ void findmap(int tid){
 
 int main()   
 { 
+	srand(int(clock()*10000));
 	int threadsnum=1;
 	std::cout << "Enter the size:"; // enter the size of the matrix
 	std::cin >> size;
